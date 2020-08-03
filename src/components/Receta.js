@@ -17,7 +17,7 @@ const Receta = ({receta}) => {
                     <button 
                         type ="button"
                         className="btn btn-block btn-primary"
-                        oncClick={() => {
+                        onClick={() => {
                             guardarIdReceta(receta.idDrink)
                         }}
                     >

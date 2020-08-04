@@ -22,7 +22,14 @@ function getModalStyle() {
 const useStyles = makeStyles(theme => ({
     paper: {
       position: 'absolute',
-      width: 400,
+      [theme.breakpoints.down('sm')]: {
+        width: '100%',  
+      },
+      [theme.breakpoints.up('sm')]: {
+        width: 450,  
+      },
+      maxHeight: 700,
+      overflowY: 'auto',
       backgroundColor: theme.palette.background.paper,
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
@@ -49,6 +56,22 @@ const Receta = ({receta}) => {
     //extraer los valores del context
     const {informacion, guardarIdReceta, guardarReceta} = useContext(ModalContext);
 
+    // Muestra y formatea los ingredientes
+    const mostrarIngredientes = informacion => {
+        let ingredientes = [];
+        for (let i = 1; i < 16; i++){
+            //Si hay algo (Debido a que en la api, hay ingredientes nulos, dependiendo de la receta)
+            if(informacion[`strIngredient${i}`]){
+                ingredientes.push(
+                    <li>   
+                        {informacion[`strIngredient${i}`]}: {informacion[`strMeasure${i}`]}
+                    </li>
+                )
+            }
+            
+        }
+        return ingredientes;
+    }
     
     return(
         <div className="col-md-4 mb-3">
@@ -71,18 +94,25 @@ const Receta = ({receta}) => {
                         open={open}
                         onClose={() => {
                            guardarIdReceta(null); 
-                           handleClose(); 
                            //Para actualizar que aparesca la receta actual y no la anterior
                            guardarReceta({});
+                           handleClose(); 
+                           
                         }} 
                     >
                         <div style = {modalStyle} className={classes.paper}>
-                            <h2>{informacion.strDrink}</h2>
-                            <h3 className="mt-4">Instrucciones</h3>
+                            <h2>{informacion.strDrink}</h2> 
+                            <br/>
+                            <h4>Ingredientes y cantidades</h4>
+                            <ul>
+                                {mostrarIngredientes(informacion)}
+                            </ul>
+                            <img className="img-fluid my-4" src={informacion.strDrinkThumb}/>
+                            <h4 className="mt-4">Instrucciones</h4>
                             <p>
                                 {informacion.strInstructions}
                             </p>
-                            <img className="img-fluid my-4" src={informacion.strDrinkThumb}/>
+                           
                         </div>
                     </Modal>
                 </div>

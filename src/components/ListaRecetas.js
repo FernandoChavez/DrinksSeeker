@@ -14,7 +14,6 @@ const ListaRecetas = () => {
                 <Receta 
                     key={receta.idDrink}
                     receta={receta}
-
                 />
             ))}
 

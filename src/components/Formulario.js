@@ -4,6 +4,8 @@ import React, {useContext, useState} from 'react'
 //Tenemos que pasar el valor o variable que retorne createContext()
 import {CategoriasContext} from '../context/CategoriaContext'
 import {RecetasContext} from '../context/RecetasContext';
+import Error from './Error'
+
 const Formulario = () => {
 
     const [busqueda, guardarBusqueda] = useState({
@@ -11,10 +13,14 @@ const Formulario = () => {
         categoria: ''
     }) 
 
+    //state del error al hacer bisqueda de campos vacios
+    const [ error, guardarError] = useState(false);
+
     //Extraigo las categorias ingresadas en el value del CategoriasContext.Provider en CategoriasContesxt.js
     const { categorias} = useContext(CategoriasContext);
     const { buscarRecetas, guardarConsultar } = useContext(RecetasContext);
 
+    const {nombre, categoria} = busqueda;
 
     //funcion para leer contenidos
     const obtenerDatosReceta = e => {
@@ -26,20 +32,39 @@ const Formulario = () => {
   
     //console.log(categorias);
 
+    //Cuando el usuario da submit al form
+    const handleSubmit = e =>{
+        e.preventDefault();
+
+        //validar
+        if (nombre.trim()=== '' || categoria.trim() === ''){
+            guardarError(true);
+            return;
+        }
+        guardarError(false);
+        buscarRecetas(busqueda);
+        guardarConsultar(true);
+
+    }
+
     return (
        <form
         className="col-12"
-        //onSubmit={buscarRecetas}
+        onSubmit={handleSubmit}
+        /*
         onSubmit={e => {
             e.preventDefault();
             buscarRecetas(busqueda);
             guardarConsultar(true);
         }}
+        */
        >
+        
            <fieldset className="text-center">
                <legend>Busca bebidas por Categorias o Ingredientes</legend>
            </fieldset>
 
+           {error ? <Error mensaje="Ambos campos son obligatorios" /> : null}
            <div className="row mt-4">
                <div className="col-md-4">
                    <input

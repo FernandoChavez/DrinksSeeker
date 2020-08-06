@@ -19,3 +19,19 @@ h1 {
   text-align: center;
   font-size: 3rem;
 }
+
+.error {
+  padding: 1rem!important;
+  text-align: center!important;
+  color: black!important;
+  background: white;
+  border-radius: 0.5rem
+}
+
+.error {
+  padding: 1rem!important;
+  color:black;
+  margin-top: 3rem;
+  text-align: center;
+  text-emphasis: left;
+}
